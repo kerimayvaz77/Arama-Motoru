@@ -1,0 +1,514 @@
+#include <iostream>
+#include <bits/stdc++.h> 
+#include <string>
+#include <cstring>
+#include <fstream>
+using namespace std; 
+#define d 256
+void aramatameslesen(string pat, string txt, int q)  
+{  
+    int M = pat.size();  //dışardan girilen kelimenin uzunluğu
+    int N = txt.size();  //dosyada okunan kelimenin uzunluğu  
+    int i,j;  //j ve i tanımladım
+    int p = 0; //p 0 tanımladım
+    int t = 0;   //t 0 tanımladım
+    int h = 1;  //h 1 tanımladım
+ 
+    for (i = 0; i < M - 1; i++)   //h ı girilen kelimenin uzunluğu kadar hesaplıyor 
+        h = (h * d) % q;  
+  
+    
+    for (i = 0; i < M; i++)  
+    {  
+        p = (d * p + pat[i]) % q;  
+        t = (d * t + txt[i]) % q;  
+    }  
+  
+ 
+    for (i = 0; i <= N - M; i++)  
+    {  
+  
+        
+        if ( p == t )  
+        {  
+           
+            for (j = 0; j < M; j++)  
+            {  
+                if (txt[i+j] != pat[j])  
+                    break;  
+               
+            }  
+  
+            
+            if (j == M){
+            	if(i==0){
+            		if(M==N){
+					//tam eslesme çıkma yeri
+            			fstream dosya_guncelle("deneme.txt",ios::app|ios::in|ios::out);
+            			dosya_guncelle<<"|************----Tam Eslesme----************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"-----------------"<<txt<<"-----------------"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle<<"|************-------------------************|"<<endl;
+            			dosya_guncelle.close();
+            			remove("SONUC.txt");
+    rename("deneme.txt","SONUC.txt");
+    system("SONUC.txt");
+            			
+					}					
+				}
+						
+			}
+     
+	   }
+	   
+        
+		 
+        if ( i < N-M )  
+        {  
+            t = (d*(t - txt[i]*h) + txt[i+M])%q;  
+  
+             
+            if (t < 0)  
+            t = (t + q);  
+        }
+        
+							
+		  
+  			  }
+	}
+void tameslesendosyalama(string girilen,string dosyadaokunan,int q)
+{
+	ifstream dosyaoku("kelimeler1.txt");//kelimeler1.txt açıyor
+    while(!dosyaoku.eof()){
+    	getline(dosyaoku,dosyadaokunan);//kelimeler1.txt' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+		aramatameslesen(girilen, dosyadaokunan, q);//kelimeler1.txt deki çekilen kelimeyi algoritmaya gönderiyor		
+	}
+	dosyaoku.close();
+	
+	fstream dosya2("kelimeler2.docx",ios::app|ios::out|ios::in);//kelimeler2.docx açıyor
+	while(!dosya2.eof()){
+    	getline(dosya2,dosyadaokunan);//kelimeler2.docx' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramatameslesen(girilen, dosyadaokunan, q);//kelimeler2.docx deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya2.close();
+	fstream dosya1("kelimeler3.pdf",ios::app|ios::out|ios::in);//kelimeler3.pdf açıyor
+	while(!dosya1.eof()){
+    	getline(dosya1,dosyadaokunan);//kelimeler3.pdf' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramatameslesen(girilen, dosyadaokunan,q);//kelimeler3.pdf'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	}
+	dosya1.close();
+	fstream dosya3("kelimeler4.html",ios::app|ios::out|ios::in);//kelimeler4.html açıyor
+	while(!dosya3.eof()){
+    	getline(dosya3,dosyadaokunan);//kelimeler4.html' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramatameslesen(girilen, dosyadaokunan, q);//kelimeler4.html'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya3.close();
+}
+void yakinindayakini(string pat,string txt,int q)
+{
+	int M = pat.size(); //dışardan girilen kelimenin uzunluğu 
+    int N = txt.size();	//dosyada okunan kelimenin uzunluğu  
+    int j;  //j tanımladım
+    int z=0;// z tanımlayıp 0'a eşitledim
+    	for(j=0;txt[j];j++){//dosyada okunan kadar çalışması için bi for yaptım
+    		if(txt[j]==pat[j]){//eğer dışardan girilenin j. indisi ile okunanın j. indisi eşleşiyorsa z 1 artıyor
+    			z++;
+			}
+			else if(txt[j]==pat[j+1]){//eğer dışardan girilenin j+1. indisi ile okunanın j. indisi eşleşiyorsa z 1 artıyor
+				z++;
+			}
+			else if(txt[j]==pat[j-1]){//eğer dışardan girilenin j. indisi ile okunanın j-1. indisi eşleşiyorsa z 1 artıyor
+				z++;
+			}
+		}
+		if((z>=N-1)&&(txt[0]==pat[0])&&(N==M||N-1==M||N+1==M)&&txt!=pat)
+		/* 1)eğer üstteki for döngüsünden çıkan z, dışardan girilen kelimenin uzunluğundan büyük yada eşitse if'in ilki TRUE
+		2)eğer txt 0. indisiyle patın 0. indisi birbirine eşitse TRUE
+		3)eğer dosyadan okunanın uzunluğuyla girilen kelimenin uzunluğu eşit veya
+				dosyadan okunanın uzunluğunun bir eksiğinin  girilen kelimenin uzunluğuyla eşitse veya
+				dosyadan okunanın uzunluğunun bir fazlasının  girilen kelimenin uzunluğuyla eşitse TRUE
+		4)dosyadan okunan ile dışardan girilen eşit değilse TRUE(Bunu yapmamın sebebi eşit olursa tam eşleşmeyi de yazdığı için
+		ama ben bu algoritmayı yakın eşleşme için yazdığımdan eşit olmamalı*/
+				
+		{
+			
+		
+				fstream dosya_guncelle3("SONUC.txt",ios::app|ios::in|ios::out);//sonucu açtım
+				dosya_guncelle3<<endl<<"---- "<<txt<< " ----"<<endl;//dosyaya yazıyor
+					dosya_guncelle3.close();//dosyayı kapatıyor
+		}		
+}
+void yakinindayakinidosyalama(string girilen,string dosyadaokunan,int q)
+{
+		ifstream dosyaoku("kelimeler1.txt");//kelimeler1.txt açıyor
+    while(!dosyaoku.eof()){
+    	getline(dosyaoku,dosyadaokunan);//kelimeler1.txt' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+		yakinindayakini(girilen, dosyadaokunan, q);//kelimeler1.txt deki çekilen kelimeyi algoritmaya gönderiyor		
+	}
+	dosyaoku.close();
+	
+	fstream dosya2("kelimeler2.docx",ios::app|ios::out|ios::in);//kelimeler2.docx açıyor
+	while(!dosya2.eof()){
+    	getline(dosya2,dosyadaokunan);//kelimeler2.docx' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	yakinindayakini(girilen, dosyadaokunan, q);//kelimeler2.docx deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya2.close();
+	fstream dosya1("kelimeler3.pdf",ios::app|ios::out|ios::in);//kelimeler3.pdf açıyor
+	while(!dosya1.eof()){
+    	getline(dosya1,dosyadaokunan);//kelimeler3.pdf' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	yakinindayakini(girilen, dosyadaokunan,q);//kelimeler3.pdf'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	}
+	dosya1.close();
+	fstream dosya3("kelimeler4.html",ios::app|ios::out|ios::in);//kelimeler4.html açıyor
+	while(!dosya3.eof()){
+    	getline(dosya3,dosyadaokunan);//kelimeler4.html' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	yakinindayakini(girilen, dosyadaokunan, q);//kelimeler4.html'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya3.close();
+	
+}
+void aramaenyakin1(string pat, string txt, int q)  
+{  
+    int M = pat.size();  //dışardan girilen kelimenin uzunluğu
+    int N = txt.size();  //dosyada okunan kelimenin uzunluğu
+    int i,j;  //j ve i tanımladım
+    int p = 0; //p 0 tanımladım
+    int t = 0;  // t 0 tanımladım
+    int h = 1; // h 1 tanımladım
+ 
+    for (i = 0; i < M - 1; i++) //h ı girilen kelimenin uzunluğu kadar hesaplıyor 
+        h = (h * d) % q;  
+  
+    
+    for (i = 0; i < M; i++)  
+    {  
+        p = (d * p + pat[i]) % q;  
+        t = (d * t + txt[i]) % q;  
+    }  
+  
+ 
+    for (i = 0; i <= N - M; i++)  
+    {  
+  
+        
+        if ( p == t )  
+        {  
+           
+            for (j = 0; j < M; j++)  
+            {  
+                if (txt[i+j] != pat[j])  
+                    break;  
+               
+            }  
+  
+            
+            if (j == M){
+            	if(i==0){
+					if(N-M<=2&&M!=N){//2 eksiği yada benzerliği var mı diye bakıyor
+						ofstream dosya_guncelle3("SONUC.txt",ios::app);
+						dosya_guncelle3<<endl<<"---- "<<txt<< " ----"<<endl;
+						dosya_guncelle3.close();
+							}
+							
+						
+								
+				}
+						
+			}
+     
+	   }
+	   
+        
+		 
+        if ( i < N-M )  
+        {  
+            t = (d*(t - txt[i]*h) + txt[i+M])%q;  
+  
+             
+            if (t < 0)  
+            t = (t + q);  
+        }
+        
+							
+		  
+  			  }
+	}
+void enyakin1dosyalama(string girilen,string dosyadaokunan,int q)
+{
+		ifstream dosyaoku("kelimeler1.txt");//kelimeler1.txt açıyor
+    while(!dosyaoku.eof()){
+    	getline(dosyaoku,dosyadaokunan);//kelimeler1.txt' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+		aramaenyakin1(girilen, dosyadaokunan, q);//kelimeler1.txt deki çekilen kelimeyi algoritmaya gönderiyor		
+	}
+	dosyaoku.close();
+	
+	fstream dosya2("kelimeler2.docx",ios::app|ios::out|ios::in);//kelimeler2.docx açıyor
+	while(!dosya2.eof()){
+    	getline(dosya2,dosyadaokunan);//kelimeler2.docx' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenyakin1(girilen, dosyadaokunan, q);//kelimeler2.docx deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya2.close();
+	fstream dosya1("kelimeler3.pdf",ios::app|ios::out|ios::in);//kelimeler3.pdf açıyor
+	while(!dosya1.eof()){
+    	getline(dosya1,dosyadaokunan);//kelimeler3.pdf' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenyakin1(girilen, dosyadaokunan,q);//kelimeler3.pdf'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	}
+	dosya1.close();
+	fstream dosya3("kelimeler4.html",ios::app|ios::out|ios::in);//kelimeler4.html açıyor
+	while(!dosya3.eof()){
+    	getline(dosya3,dosyadaokunan);//kelimeler4.html' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenyakin1(girilen, dosyadaokunan, q);//kelimeler4.html'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya3.close();
+	
+}
+void aramaazyakin(string pat, string txt, int q)  
+{  
+    int M = pat.size();  //dışardan girilen kelimenin uzunluğu
+    int N = txt.size();  //dosyada okunan kelimenin uzunluğu
+    int i,j;  //j ve i tanımladım
+    int p = 0; 
+    int t = 0;   
+    int h = 1;  
+  	int sayac=0;//sayac tanımlayıpp 0'a eşitledim
+ 
+    for (i = 0; i < M - 1; i++)  
+        h = (h * d) % q;  
+  
+    
+    for (i = 0; i < M; i++)  
+    {  
+        p = (d * p + pat[i]) % q;  
+        t = (d * t + txt[i]) % q;  
+    }  
+  
+ 
+    for (i = 0; i <= N - M; i++)  
+    {  
+  
+        
+        if ( p == t )  
+        {  
+           
+            for (j = 0; j < M; j++)  
+            {  
+                if (txt[i+j] != pat[j])  
+                    break;  
+               
+            }  
+  
+            
+            if (j == M){
+				if(i==1){
+				fstream dosya_guncelle3("SONUC.txt",ios::app|ios::in|ios::out);//sonucu açtım
+				/* burda bunu yapmamın sebebi bu en uzak eşleşmeden çıkan sonucun önceki algoritmalardan çıkan sonuçlarla eşleşiyor mu diye bakması için
+				eğer eşleşirse birdaha yazıcak birdaha yazmaması için sorgu yaptım*/
+					dosya_guncelle3<<endl<<"---- "<<txt<< " ----"<<endl;//dosyaya yazıyor
+				dosya_guncelle3.close();//dosyayı kapatıyor
+				}
+				}
+						
+			}
+     
+	   }
+        
+		 
+        if ( i < N-M )  
+        {  
+            t = (d*(t - txt[i]*h) + txt[i+M])%q;  
+  
+             
+            if (t < 0)  
+            t = (t + q);  
+        }
+        
+							
+		  
+    	
+}
+void azyakindosyalama(string girilen,string dosyadaokunan,int q)
+{
+		ifstream dosyaoku("kelimeler1.txt");//kelimeler1.txt açıyor
+    while(!dosyaoku.eof()){
+    	getline(dosyaoku,dosyadaokunan);//kelimeler1.txt' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+		aramaazyakin(girilen, dosyadaokunan, q);//kelimeler1.txt deki çekilen kelimeyi algoritmaya gönderiyor		
+	}
+	dosyaoku.close();
+	
+	fstream dosya2("kelimeler2.docx",ios::app|ios::out|ios::in);//kelimeler2.docx açıyor
+	while(!dosya2.eof()){
+    	getline(dosya2,dosyadaokunan);//kelimeler2.docx' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaazyakin(girilen, dosyadaokunan, q);//kelimeler2.docx deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya2.close();
+	fstream dosya1("kelimeler3.pdf",ios::app|ios::out|ios::in);//kelimeler3.pdf açıyor
+	while(!dosya1.eof()){
+    	getline(dosya1,dosyadaokunan);//kelimeler3.pdf' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaazyakin(girilen, dosyadaokunan,q);//kelimeler3.pdf'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	}
+	dosya1.close();
+	fstream dosya3("kelimeler4.html",ios::app|ios::out|ios::in);//kelimeler4.html açıyor
+	while(!dosya3.eof()){
+    	getline(dosya3,dosyadaokunan);//kelimeler4.html' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaazyakin(girilen, dosyadaokunan, q);//kelimeler4.html'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya3.close();
+	
+}	
+void aramaenuzak(string pat, string txt, int q)  
+{  
+int kelimevar=0;// kelime kontrolü
+    int M = pat.size();  //dışardan girilen kelimenin uzunluğu
+    int N = txt.size();  //dosyada okunan kelimenin uzunluğu
+    int i,j;  //j ve i tanımladım
+    int sayac=0;//sayac tanımlayıpp 0'a eşitledim
+    	for(j=0;txt[j];j++){//dosyada okunan kadar çalışması için bi for yaptım
+    		if(txt[j]==pat[j]){//eğer dışardan girilenin j. indisi ile okunanın j. indisi eşleşiyorsa sayacı 2 artıyor
+    			sayac=sayac+2;//bunu yapmamın sebebi eğer eşitseler daha yakın olduğunu gösterebilmek için
+			}
+			else if(txt[j+1]==pat[j]){//eğer dışardan girilenin j. indisi ile okunanın j+1. indisi eşleşiyorsa sayaç 1 artıyor
+				sayac++;
+			}
+			else if(txt[j]==pat[j+1]){//eğer dışardan girilenin j+1. indisi ile okunanın j. indisi eşleşiyorsa sayaç 1 artıyor
+				sayac++;
+			}
+			else if(txt[j]==pat[j-1]){//eğer dışardan girilenin j-1. indisi ile okunanın j. indisi eşleşiyorsa sayaç 1 artıyor
+				sayac++;
+			}
+			else if(txt[j-1]==pat[j])//eğer dışardan girilenin j. indisi ile okunanın j-1. indisi eşleşiyorsa sayaç 1 artıyor
+    		{
+    			sayac++;
+			}
+			
+		}
+		 if(sayac>N+1&&(N==M||N-1==M||N+1==M))
+		 /*1)sayac eğer dosyada okunan uzunluğundan bir fazlasından büyükse TRUE
+		   2)eğer dosyadan okunanın uzunluğuyla girilen kelimenin uzunluğu eşit veya
+				dosyadan okunanın uzunluğunun bir eksiğinin  girilen kelimenin uzunluğuyla eşitse veya
+				dosyadan okunanın uzunluğunun bir fazlasının  girilen kelimenin uzunluğuyla eşitse TRUE
+				bu ise en uzak eşleşme */
+		 {
+
+				fstream dosya_guncelle3("SONUC.txt",ios::app|ios::in|ios::out);//sonucu açtım
+					dosya_guncelle3<<endl<<"---- "<<txt<< " ----"<<endl;//dosyaya yazıyor
+		dosya_guncelle3.close();//dosyayı kapatıyor
+					
+				}
+				
+				
+	}
+	
+	
+void enuzakdosyalama(string girilen,string dosyadaokunan,int q)
+{
+		ifstream dosyaoku("kelimeler1.txt");//kelimeler1.txt açıyor
+    while(!dosyaoku.eof()){
+    	getline(dosyaoku,dosyadaokunan);//kelimeler1.txt' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+		aramaenuzak(girilen, dosyadaokunan, q);	//kelimeler1.txt deki çekilen kelimeyi algoritmaya gönderiyor	
+	}
+	dosyaoku.close();
+	
+	fstream dosya2("kelimeler2.docx",ios::app|ios::out|ios::in);//kelimeler2.docx açıyor
+	while(!dosya2.eof()){
+    	getline(dosya2,dosyadaokunan);//kelimeler2.docx' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenuzak(girilen, dosyadaokunan, q);//kelimeler2.docx deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya2.close();
+	fstream dosya1("kelimeler3.pdf",ios::app|ios::out|ios::in);//kelimeler3.pdf açıyor
+	while(!dosya1.eof()){
+    	getline(dosya1,dosyadaokunan);//kelimeler3.pdf' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenuzak(girilen, dosyadaokunan,q);//kelimeler3.pdf'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	}
+	dosya1.close();
+	fstream dosya3("kelimeler4.html",ios::app|ios::out|ios::in);//kelimeler4.html açıyor
+	while(!dosya3.eof()){
+    	getline(dosya3,dosyadaokunan);//kelimeler4.html' nin ilk satırından başlayıp okuyor ve dosyadaokunana eşitliyor
+    	aramaenuzak(girilen, dosyadaokunan, q);//kelimeler4.html'deki çekilen kelimeyi algoritmaya gönderiyor
+    	
+	} 
+	dosya3.close();
+	
+	
+}
+void baslama()
+{
+//tam eşleşme yeni bi dosya açılıyormuş gibi üzerine yazıyor tam eşleşme çalışıyor sonrasında ise bu çalışıyor.
+//tam eşleşmeyi çıkarttıktan sonra dosyanın üzerine sadece (---- BUNU'MU DEMEK ISTEDİNİZ? ----) yazıyor
+	fstream dosya_guncelle32("deneme.txt",ios::app|ios::in|ios::out);//deneme diye bi dosya açıyorum
+						dosya_guncelle32<<"(---- BUNU'MU DEMEK ISTEDİNİZ? ----)";//içine (---- BUNU'MU DEMEK ISTEDİNİZ? ----) yazıyorum
+						dosya_guncelle32.close();//dosyayı kapatıyorum
+						remove("SONUC.txt");//sonucu siliyorum
+    rename("deneme.txt","SONUC.txt");//deneme isimli dosyanın ismini değiştirip sonuc.txt yapıyorum
+    //bu işlem sonucunda SONUC.txt nin içine (---- BUNU'MU DEMEK ISTEDİNİZ? ----) yazıyor.
+}
+void resetlemecalistirma(){
+	fstream dosya_guncelle12332("arasonuc12.txt",ios::app|ios::in|ios::out);//arasonuc diye bi dosya açıyor
+	dosya_guncelle12332<<"!!!!ARADIGINIZ SONUC BULUNAMADI!!!!"<<endl;//içine !!!!ARADIGINIZ SONUC BULUNAMADI!!!! yazıyor
+	dosya_guncelle12332.close();//dosyayı kapatıyor
+	remove("SONUC.txt");//sonucu siliyor
+    rename("arasonuc12.txt","SONUC.txt");//arasonuc12 nin yeni ismini sonuc yapıyor yani bi nevi sonucun üzerine yazıyor
+}
+void resetleme(){
+	/* eğer okuduğu sonuc dosyasında hiçbir sonuc bulamazsa en son yazdılan şeyin son karakterine bakıyor 
+	o karakter eğer ) eşit ise demekki içine hiçbir sonuç yazılmamış oluyor. yani bu ne demek;
+	tam eşleşme de olmamış,yakın eşleşmesi de yok.
+	bunu bulursa eğer üstüne sonuç bulunamadı yazıyor*/
+	ifstream dosyaoku("SONUC.txt");//sonuc dosyasını açıyor
+	char karakter;
+		while(dosyaoku.get(karakter)){//bu karakter karakter okuma.
+		//burda karakter karakter okuyor sonuna kadar
+		}
+		dosyaoku.close();
+		if(karakter==')'){// eğer en son okuduğu karakter ) eşit ise sonuc dosyasının üzerine bulunamadı yazıyor 
+			resetlemecalistirma();//yazdıgım fonksiyon çalışıyor
+		}
+}
+void main1(){
+	system("color F4");	
+	string dosyadaokunan;  //dosyada okunan kelime
+    string girilen;//dışardan kullanıcının girdiği kelime 
+    clock_t t1, t2; //zamanlayıcı için oluşturulan t1 ve t2 yi tanımladım.
+    cout<<"Aramak Istediginiz Kelimeyi Giriniz = ";getline(cin,girilen);  //kullanıcı kelimeyi giriyor
+    int q = 101;// asal sayı
+    t1 = clock(); //o an ki zamanı elde tutuyor
+   tameslesendosyalama(girilen,dosyadaokunan,q);//algoritmalar çalışıyor
+    baslama();
+    enyakin1dosyalama(girilen,dosyadaokunan,q);
+   yakinindayakinidosyalama(girilen,dosyadaokunan,q);
+	azyakindosyalama(girilen,dosyadaokunan,q);
+	enuzakdosyalama(girilen,dosyadaokunan,q);
+	t2 = clock(); // yine o a ki zamanı elinde tutuyor
+	float diff = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;   //en son tuttuğu zamandan ilk tuttuğu zamanı float olarak çıkarıp ms ölçekli float bi değere eşitliyor
+	cout<<"ARAMA ISLEMINI "<<diff<<" SANIYEDE'DE YAPMISTIR."<<endl;//burda zamanı yazıyor
+resetleme();	//resetleme fonksiyonu
+system("SONUC.txt");//SONUC.txt dosyasını açıyor
+
+}
+int main()  
+{  
+main1();//ana programın çalıştığı yer
+return 0;  
+}
